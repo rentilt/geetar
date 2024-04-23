@@ -1,0 +1,146 @@
+:root {
+    --fretboard-height: 300;
+}
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-color: white;
+
+}
+
+.fretboard{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(var(--fretboard-height)* 1px);
+    margin-top: 50px;
+    background: #e2c392;
+}
+.string{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: relative;
+}
+
+.string:before{
+    content: '';
+    width: 100%;
+    height: 10px;
+    background: linear-gradient(#eee, #888);
+    box-shadow: 76px 3px 10px #50360b;
+    z-index: 1;
+    position: absolute;
+    margin-top: 22px;
+}
+
+.note-fret{
+    display: flex;
+    flex: 1;
+    border-right: 10px solid;
+    border-image: linear-gradient(to left, #666, #bbb, #666) 1 100%;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.note-fret:first-child{
+    background: #111111;
+    min-width: 76px;
+    border-right: 12px solid;
+    flex-grow: 0;
+    flex-shrink: 0;
+    border-image: linear-gradient(to left, #ccc, #fff, #ccc) 1 100%;
+}
+
+.note-fret:before{
+    content: attr(data-note);
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+    line-height: 33px;
+    text-align: center;
+    background: teal;
+    z-index: 2;
+    color: lightgrey;
+    opacity: 0.5;
+}
+
+.note-fret:hover:before{
+    cursor: pointer;
+    border: 2px solid black;
+}
+
+.single-fretmark:after{
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #eee;
+    top: calc(var(--fretboard-height) * 1px / 2) ;
+    transform: translate(0, -50%);
+
+}
+
+.double-fretmark:before{
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #eee;
+    top: calc( (var(--fretboard-height) * 1px / 4) + 25px);
+    transform: translate(-140%, -50%);
+
+}
+
+.double-fretmark:after{
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #eee;
+    top: calc(  (var(--fretboard-height) * 1px / 4 * 3) - 25px);
+    transform: translate(-140%, -50%);
+}
+
+.main{
+    padding: 10px;
+}
+
+.played_notes{
+    margin-top: 20px;
+}
+
+.scales{
+    margin-top: 20px;
+}
+.scale{
+    display: flex;
+    margin: 10px;
+}
+
+.scale .name{
+    width: 30%;
+    font-weight: bold;
+}
+
+.scale .notes{
+    width: 70%;
+    justify-content: space-between;
+    text-align: justify;
+    text-justify: distribute;
+}
+
+.played:before{
+    background: red;
+}
+
+.in_scale:before{
+    background: blue;
+}
