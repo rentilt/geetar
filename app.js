@@ -4,15 +4,15 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const played_notes_input = document.querySelector('.played_notes_input');
     const played_notes_text = document.querySelector('.played_notes_text');
-    const numberOfFrets = 12;
+    const numberOfFrets = 16;
     const numberOfStrings = 6;    
-    const singleFretMarks = [3, 5, 7, 9];
+    const singleFretMarks = [3, 5, 7, 9, 15, 17];
     const doubleFretMarks = [12];
     const played_note_color = '#000000';
     const scale_note_color = '#000000';
     var scales = {};
     const played_notes = [];
-    var selected_scale = ['C'];
+    var selected_scale = [];
     const notesSharp = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
     const tuning = [4, 11, 7, 2, 9, 4]
     const app = {
@@ -36,17 +36,16 @@ document.addEventListener("DOMContentLoaded", function(){
             Array.from(all_notes).forEach(element => {
                 let note = element.getAttribute('data-note')
                 element.classList.remove('played');
+                element.classList.remove('in-scale');
                 if (played_notes.includes(note)){
                     // note.style.color = played_note_color;
                     console.log(note);
                     element.classList.add('played');
                     // element.innerHTML = ".note-fret:before {background: black;}";
                 }
-
                 else if (selected_scale.includes(note)){
                     // note.style.color = played_note_color;
-                    console.log(note);
-                    element.classList.add('in_scale');
+                    element.classList.add('in-scale');
                     // element.innerHTML = ".note-fret:before {background: black;}";
                 }
             });
@@ -59,15 +58,25 @@ document.addEventListener("DOMContentLoaded", function(){
                 possibleScales[name] = notes;
               }
             }
+            selected_scale = []
             // reset scales
             while (scales_div.firstChild) {
                 scales_div.removeChild(scales_div.lastChild);
             }
+
             // display scales
             for (const [key, value] of Object.entries(possibleScales)) {
-                console.log(value);
                 let scale = tools.createElement('div');
                 scale.classList.add("scale");
+                let that = this;
+                scale.addEventListener('click',(e => {
+                    Array.from(scales_div.children).forEach(element => {
+                        element.classList.remove('picked');
+                    });
+                    scale.classList.add('picked');
+                    selected_scale = value;
+                    that.set_note_colors()
+                }))
                 let name = tools.createElement('p');
                 name.classList.add("name");
                 name.innerHTML = key;
@@ -81,7 +90,6 @@ document.addEventListener("DOMContentLoaded", function(){
                     }
                     else{
                         note_text += '|\t'+ note + '';
-
                     }
                 })
                 
@@ -93,6 +101,11 @@ document.addEventListener("DOMContentLoaded", function(){
             
         },
         addPlayedNote(note){
+            Array.from(scales_div.children).forEach(element => {
+                element.classList.remove('picked');
+            });
+            selected_scale = []
+
             // remove note if duplicate
             if(notesSharp.indexOf(note) != -1 && played_notes.indexOf(note) != -1){
                 played_notes.splice(played_notes.indexOf(note), 1);
@@ -103,11 +116,12 @@ document.addEventListener("DOMContentLoaded", function(){
             }
             
             
+            
             // clear text from input
             played_notes_input.value = "";
             played_notes_text.innerHTML = played_notes;
-            this.set_note_colors()
             this.possible_scales()
+            this.set_note_colors()
         },
         setupFretboard(){
             console.log(scales)
@@ -145,16 +159,11 @@ document.addEventListener("DOMContentLoaded", function(){
             }
         },
         setupMain(){
+            let that = this
             played_notes_input.addEventListener('keydown', function(event){
                 if(event.key == "Enter"){
                     let note = event.target.value;
-                    if(notesSharp.indexOf(note) != -1 && played_notes.indexOf(note) == -1){
-                        played_notes.push(note);    
-                    }
-                    
-                    // clear text from input
-                    played_notes_input.value = "";
-                    played_notes_text.innerHTML = played_notes;
+                    that.addPlayedNote(note)
                 }
             });
         }

@@ -123,6 +123,18 @@ body{
 .scale{
     display: flex;
     margin: 10px;
+    background-color: #b5b5b5;
+    padding: 8px;
+    border: 2px solid black;
+}
+
+.scale:hover{
+    cursor: pointer;
+    background-color: #e6d0ac;
+}
+
+.picked{
+    background-color: #e2c392;
 }
 
 .scale .name{
@@ -141,6 +153,6 @@ body{
     background: red;
 }
 
-.in_scale:before{
+.in-scale:before{
     background: blue;
 }
