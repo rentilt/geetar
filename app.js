@@ -1,20 +1,25 @@
 document.addEventListener("DOMContentLoaded", function(){
     const fretboard = document.querySelector('.fretboard');
     const scales_div = document.querySelector('.scales');
-
+    const title = document.querySelector('.title');
+    const title_header = document.querySelector('.title_header')
     const played_notes_input = document.querySelector('.played_notes_input');
     const played_notes_text = document.querySelector('.played_notes_text');
-    const numberOfFrets = 16;
-    const numberOfStrings = 6;    
+    var numberOfFrets = 16;
+    var numberOfStrings = 6;    
     const singleFretMarks = [3, 5, 7, 9, 15, 17];
     const doubleFretMarks = [12];
     const played_note_color = '#000000';
     const scale_note_color = '#000000';
+    
+    //  change from ukelele to guitar
+    const ukelele_checkbox = document.querySelector('#ukelele')
+    
     var scales = {};
-    const played_notes = [];
+    var played_notes = [];
     var selected_scale = [];
     const notesSharp = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-    const tuning = [4, 11, 7, 2, 9, 4]
+    var tuning = [4, 11, 7, 2, 9, 4]
     const app = {
         async init(){
             fetch('./scales.json')
@@ -124,7 +129,12 @@ document.addEventListener("DOMContentLoaded", function(){
             this.set_note_colors()
         },
         setupFretboard(){
+
             console.log(scales)
+            // clear fretboard
+            while (fretboard.firstChild) {
+                fretboard.removeChild(fretboard.lastChild);
+            }
             // add strings to fretboard
             for (let i = 0; i < numberOfStrings; i++) {
                 let string = tools.createElement("div")
@@ -158,14 +168,49 @@ document.addEventListener("DOMContentLoaded", function(){
                 }
             }
         },
+        changeInstrument(){
+            // current instrument is guitar
+            if(numberOfStrings == 6){
+                numberOfStrings = 4
+                numberOfFrets = 16
+                tuning = [9, 4, 0, 7]
+                played_notes = []
+                played_notes_input.value = "";
+                played_notes_text.innerHTML = played_notes;
+                this.setupFretboard()
+                this.possible_scales()
+                this.set_note_colors()
+                title.innerHTML = 'ukeelele'
+                title_header.innerHTML = 'ukeelele'
+            }
+            else{
+                numberOfStrings = 6
+                numberOfFrets = 12
+                tuning = [4, 11, 7, 2, 9, 4]
+                played_notes = []
+                played_notes_input.value = "";
+                played_notes_text.innerHTML = played_notes;
+                this.setupFretboard()
+                this.possible_scales()
+                this.set_note_colors()
+                title.innerHTML = 'geetar'
+                title_header.innerHTML = 'geetar'
+            }
+        },
         setupMain(){
             let that = this
             played_notes_input.addEventListener('keydown', function(event){
                 if(event.key == "Enter"){
                     let note = event.target.value;
-                    that.addPlayedNote(note)
+                    that.addPlayedNote(note);
                 }
             });
+
+            // add listener for ukelele checkbox
+            ukelele_checkbox.addEventListener("click", function(event){
+                that.changeInstrument();
+            });
+            
         }
     }
 
