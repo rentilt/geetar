@@ -7,8 +7,7 @@
 }
 
 body{
-    background-color: white;
-
+    background-color: #d8d7c2;
 }
 
 h1{
@@ -74,10 +73,14 @@ h1{
     border-radius: 50%;
     line-height: 33px;
     text-align: center;
-    background: teal;
+    font-size: 16px;
+    font-weight: bold;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+    background: rgba(0, 128, 128, 0.5);
     z-index: 2;
     color: lightgrey;
-    opacity: 0.5;
 }
 
 .note-fret:hover:before{
